@@ -1,0 +1,36 @@
+package com.focusflow.focusflow_backend.controller;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.focusflow.focusflow_backend.dto.LoginRequest;
+import com.focusflow.focusflow_backend.dto.RegisterRequest;
+import com.focusflow.focusflow_backend.dto.UserResponse;
+import com.focusflow.focusflow_backend.service.UserService;
+
+@RestController
+@RequestMapping("/api/auth")
+public class AuthController {
+    private final UserService userService;
+
+    public AuthController(UserService userService){
+        this.userService = userService;
+    }
+
+    @PostMapping("/register")
+    public UserResponse register(@RequestBody RegisterRequest request){
+        return userService.register(request);
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody LoginRequest request){
+        if (userService.login(request) ==  true){
+            return "Login successful";
+        }
+        else{
+            return "Invalid credentials";
+        }
+    }
+}
