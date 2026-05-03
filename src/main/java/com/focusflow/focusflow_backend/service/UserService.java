@@ -13,10 +13,12 @@ import com.focusflow.focusflow_backend.repository.UserRepository;
 public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public UserService(UserRepository userRepository , BCryptPasswordEncoder passwordEncoder){
+    public UserService(UserRepository userRepository , BCryptPasswordEncoder passwordEncoder , JwtService jwtService ){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     public UserResponse register(RegisterRequest request){
@@ -36,14 +38,14 @@ public class UserService {
         return response;
     }
 
-    public boolean login(LoginRequest request){
-        User user = userRepository.findByEmail(request.email).orElse(null);
+    public String login(LoginRequest request){
+        User user = userRepository.findByEmail(request.email).orElseThrow(() -> new RuntimeException("User not found")) ; 
 
-        if (user == null){
-            return false;
+        boolean success = passwordEncoder.matches(request.getPassword(),user.getPassword());
+        if(success){
+            return jwtService.generateToken(user.getEmail());
         }
-
-        return passwordEncoder.matches(request.getPassword(),user.getPassword());
+        throw new RuntimeException("Invalid password");
     }
 
 }

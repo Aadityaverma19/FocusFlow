@@ -26,11 +26,6 @@ public class AuthController {
 
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest request){
-        if (userService.login(request) ==  true){
-            return "Login successful";
-        }
-        else{
-            return "Invalid credentials";
-        }
+        return userService.login(request);
     }
 }
