@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.focusflow.focusflow_backend.dto.TaskRequest;
+import com.focusflow.focusflow_backend.dto.TaskResponse;
 import com.focusflow.focusflow_backend.entity.Task;
 import com.focusflow.focusflow_backend.service.TaskService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -24,17 +27,17 @@ public class TaskController {
     private final TaskService taskService;
 
     @PostMapping
-    public Task createTask(@RequestBody Task task){
-        return taskService.createTask(task);
+    public TaskResponse createTask(@Valid @RequestBody TaskRequest request){
+        return taskService.createTask(request);
     }
 
     @GetMapping
-    public List<Task> getMyTasks(){
+    public List<TaskResponse> getMyTasks(){
         return taskService.getMyTasks();
     }
 
     @PutMapping("/{id}")
-    public Task toggleTask(@PathVariable Long id){
+    public TaskResponse toggleTask(@PathVariable Long id){
         return taskService.toggleTask(id);
     }
 
