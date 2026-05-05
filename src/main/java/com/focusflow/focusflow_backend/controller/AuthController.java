@@ -10,6 +10,8 @@ import com.focusflow.focusflow_backend.dto.RegisterRequest;
 import com.focusflow.focusflow_backend.dto.UserResponse;
 import com.focusflow.focusflow_backend.service.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -20,12 +22,12 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public UserResponse register(@RequestBody RegisterRequest request){
+    public UserResponse register(@Valid @RequestBody RegisterRequest request){
         return userService.register(request);
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest request){
+    public String login(@Valid @RequestBody LoginRequest request){
         return userService.login(request);
     }
 }
